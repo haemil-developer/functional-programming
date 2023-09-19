@@ -5,13 +5,20 @@ const stockItem = (item: Item): string => {
     const optionDiscountPrice = O.fromUndefined(item.discountPrice);
     const discountPrice = O.getOrElse(optionDiscountPrice, 0);
 
-    let saleText = '';
-    if (O.isSome(optionDiscountPrice)) {
-        saleText = `${discountPrice}원 할인`
-    }
+
+    const saleText = O.mapOrElse(optionDiscountPrice, (discountPrice) => `${discountPrice}원 할인`, "");
+
+    // const optionSaleText = O.map(optionDiscountPrice, (discountPrice) => `${discountPrice}원 할인`);
+    // const saleText = O.getOrElse(optionSaleText, "");
+
+    // let saleText = '';
+    // if (O.isSome(optionDiscountPrice)) {
+    //     saleText = `${discountPrice}원 할인`;
+    // }
+
     // let discountPrice = 0;
     // if (item.discountPrice !== undefined) {
-    //     saleText = `${item.discountPrice}원 할인`
+    //     saleText = `${item.discountPrice}원 할인`;
     //     discountPrice = item.discountPrice;
     // }
     return `${item.name} / 가격: ${item.price - discountPrice} ${saleText}/ 수량: ${item.quantity}`;
@@ -68,11 +75,11 @@ const totalPrice = (list: Array<Item>): string => {
     const totalPrice = totalCalculator(list, (item) => item.price * item.quantity);
 
     const totalDiscountPrice = totalCalculator(list, (item) => {
-        let discountPrice = 0;
-        if (item.discountPrice !== undefined) {
-            discountPrice = item.discountPrice;
-        }
-
+        const discountPrice = O.getOrElse(O.fromUndefined(item.discountPrice), 0);
+        // let discountPrice = 0;
+        // if (item.discountPrice !== undefined) {
+        //     discountPrice = item.discountPrice;
+        // }
         return discountPrice * item.quantity;
     })
 

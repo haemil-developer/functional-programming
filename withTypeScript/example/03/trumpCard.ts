@@ -12,7 +12,7 @@ for (const suit of suits) {
 
 // 모든 카드 목록은 아래의 작업이 완료된 것이다.
 const cards2 =
-    suits.map((suit) =>
+    suits.flatMap((suit) =>
         numbers.map((number) =>
             suit + number)  // 카드는 무늬와 숫자를 연결 한 문자열이다.
     );
